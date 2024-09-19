@@ -1,0 +1,33 @@
+global:
+  scrape_interval: 15s # Как часто собирать метрики по умолчанию (15 секунд)
+  evaluation_interval: 15s # Как часто оценивать правила (15 секунд)
+
+rule_files:
+  - "/etc/prometheus/rules.yml"
+
+alerting:
+  alertmanagers:
+  - static_configs:
+    - targets: ['alertmanager:9093']
+
+scrape_configs:
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+
+  - job_name: 'minecraft'
+    static_configs:
+      - targets: ['10.66.66.2:9940']
+        labels:
+          server_name: '2c2t'
+
+  - job_name: 'velocity'
+    scrape_interval: 5s
+    static_configs:
+      - targets: [ '10.66.66.2:9985' ]
+        labels:
+          proxy_name: 'proxy'
+
+  - job_name: 'node-0'
+    static_configs:
+      - targets: ['10.66.66.2:9100']

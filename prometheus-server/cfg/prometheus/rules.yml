@@ -1,0 +1,33 @@
+groups:
+  - name: minecraft_down
+    rules:
+      - alert: MinecraftServerDown
+        expr: up{job="minecraft"} == 0
+        for: 30s
+        labels:
+          severity: critical
+        annotations:
+          summary: "Minecraft Server is down"
+          description: "The Minecraft server has not responded for more than 30 second."
+
+  - name: proxy_down
+    rules:
+      - alert: ProxyServerDown
+        expr: up{job="velocity"} == 0
+        for: 30s
+        labels:
+          severity: critical
+        annotations:
+          summary: "Proxy Server is down"
+          description: "The Proxy server has not responded for more than 30 second."
+
+  - name: minecraft_tps
+    rules:
+      - alert: LowTPS
+        expr: mc_tps < 18  # Установите порог TPS, ниже которого будет срабатывать алерт
+        for: 30s           # Условие должно быть истинным в течение 30 секунд
+        labels:
+          severity: critical
+        annotations:
+          summary: "Low TPS Alert"
+          description: "The TPS on the Minecraft server has dropped below 18."

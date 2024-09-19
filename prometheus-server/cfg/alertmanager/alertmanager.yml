@@ -1,0 +1,35 @@
+route:
+  group_by: ['alertname']
+  group_wait: 5s #30s
+  group_interval: 10s #5m
+  repeat_interval: 1h
+  receiver: 'telegram'
+
+  routes:
+    - receiver: 'telegram'
+      match_re:
+        severity: critical
+      continue: true
+    - receiver: 'discord'
+      match_re:
+        severity: critical
+
+# Конфигурация бота телеграмм
+receivers:
+  - name: 'telegram'
+    telegram_configs:
+      - api_url: https://api.telegram.org
+        bot_token: 'token'
+        chat_id: chat_id
+        send_resolved: false
+
+# Конфигурация бота дискорд
+  - name: 'discord'
+    discord_configs:
+      - webhook_url: webhook_url
+
+inhibit_rules:
+  - source_match:
+      severity: 'critical'
+    target_match:
+      severity: 'warning'
